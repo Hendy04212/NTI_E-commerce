@@ -12,10 +12,31 @@ import 'package:ecommerce_shop/features/shoping_cart/views/cart_view.dart';
 import 'package:ecommerce_shop/features/setting/views/setting_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
+
+  @override
+  State<ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
+  String _userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userName = prefs.getString('userFullName') ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +74,36 @@ class ProfileView extends StatelessWidget {
         child: Column(
           spacing: 30,
           children: [
-            CustomCircleAvatar(),
+            // Avatar + Name section
+            Column(
+              children: [
+                CustomCircleAvatar(),
+                if (_userName.isNotEmpty) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    _userName,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: AppAssets.fontfamily,
+                      color: AppColors.loginbtn,
+                    ),
+                  ),
+                ],
+              ],
+            ),
             ProfileMenuItem(
               icon: SvgPicture.asset(AppAssets.profile),
               text: 'My Profile',
-              onTap: () {
-               MyNavigator.goTo(screen: MyProfile());
+              onTap: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MyProfile()),
+                );
+                // Refresh name if data was saved
+                if (result == true) {
+                  _loadUserName();
+                }
               },
             ),
             ProfileMenuItem(

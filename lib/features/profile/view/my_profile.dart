@@ -6,15 +6,59 @@ import 'package:ecommerce_shop/features/profile/widget/Custom_Circle_Avatar.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ecommerce_shop/core/widgets/custom_btn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyProfile extends StatelessWidget {
+class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController fullNameController = TextEditingController();
-    final TextEditingController phoneController = TextEditingController();
+  State<MyProfile> createState() => _MyProfileState();
+}
 
+class _MyProfileState extends State<MyProfile> {
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedData();
+  }
+
+  Future<void> _loadSavedData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      fullNameController.text = prefs.getString('userFullName') ?? '';
+      phoneController.text = prefs.getString('userPhone') ?? '';
+    });
+  }
+
+  Future<void> _saveData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userFullName', fullNameController.text.trim());
+    await prefs.setString('userPhone', phoneController.text.trim());
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Profile saved successfully!'),
+          backgroundColor: Color(0xFFF83758),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Navigator.pop(context, true); // Return true to indicate data was saved
+    }
+  }
+
+  @override
+  void dispose() {
+    fullNameController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -38,7 +82,7 @@ class MyProfile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomCircleAvatar(),
+              CustomCircleAvatar(showBlueBadge: true),
               SizedBox(height: 30),
               CustomFormField(
                 hintText: 'Full Name',
@@ -62,7 +106,7 @@ class MyProfile extends StatelessWidget {
               SizedBox(height: 30),
               CustomBtn(
                 text: 'Save',
-                onPressed: () {},
+                onPressed: _saveData,
               )
             ],
           ),

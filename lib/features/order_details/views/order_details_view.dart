@@ -55,9 +55,11 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
   void _cancelOrder() {
     // Cancel all orders from this checkout batch
     final orders = _cartManager.orders;
-    for (int i = orders.length - 1;
-        i >= 0 && i >= orders.length - widget.orderItems.length;
-        i--) {
+    for (
+      int i = orders.length - 1;
+      i >= 0 && i >= orders.length - widget.orderItems.length;
+      i--
+    ) {
       if (orders[i].status == 'Active') {
         _cartManager.cancelOrder(i);
       }
@@ -70,9 +72,11 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
   void _completeOrder() {
     // Complete all orders from this checkout batch
     final orders = _cartManager.orders;
-    for (int i = orders.length - 1;
-        i >= 0 && i >= orders.length - widget.orderItems.length;
-        i--) {
+    for (
+      int i = orders.length - 1;
+      i >= 0 && i >= orders.length - widget.orderItems.length;
+      i--
+    ) {
       if (orders[i].status == 'Active') {
         _cartManager.completeOrder(i);
       }
@@ -89,10 +93,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
         leading: InkWell(
           onTap: () {
             // Go back to Orders View
-            MyNavigator.goTo(
-              screen: const OrdersView(),
-              isReplace: true,
-            );
+            MyNavigator.goTo(screen: const OrdersView(), isReplace: true);
           },
           child: SvgPicture.asset(
             AppAssets.arrowback,
@@ -102,7 +103,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
           ),
         ),
         centerTitle: true,
-        title: Text(TranslationKeys.orderDetails.tr, style: AppTextStyle.appbarstylr),
+        title: Text(
+          TranslationKeys.orderDetails.tr,
+          style: AppTextStyle.appbarstylr,
+        ),
       ),
       body: Column(
         children: [
@@ -145,9 +149,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                           fontFamily: AppAssets.fontfamily,
                           fontWeight: FontWeight.w700,
                           fontSize: 18,
-                          color: _orderStatus == 'Active'
-                              ? AppColors.appbartext
-                              : _orderStatus == 'Completed'
+                          color:
+                              _orderStatus == 'Active'
+                                  ? AppColors.appbartext
+                                  : _orderStatus == 'Completed'
                                   ? Colors.green
                                   : AppColors.loginbtn,
                         ),
@@ -157,15 +162,18 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                   const SizedBox(height: 20),
 
                   // Order Items
-                  ...widget.orderItems
-                      .map((item) => _buildOrderDetailItem(item)),
+                  ...widget.orderItems.map(
+                    (item) => _buildOrderDetailItem(item),
+                  ),
 
                   const SizedBox(height: 16),
 
                   // Summary Section
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 4.0, horizontal: 16.0),
+                      vertical: 4.0,
+                      horizontal: 16.0,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -190,7 +198,9 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 4.0, horizontal: 16.0),
+                      vertical: 4.0,
+                      horizontal: 16.0,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -215,7 +225,9 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 4.0, horizontal: 16.0),
+                      vertical: 4.0,
+                      horizontal: 16.0,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -241,7 +253,9 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                   Divider(color: Color(0xFFCACACA), thickness: 1.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 4.0, horizontal: 16.0),
+                      vertical: 4.0,
+                      horizontal: 16.0,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -272,8 +286,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
           // Bottom Buttons
           if (_orderStatus == 'Active')
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 12.0,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -362,10 +378,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    item.image,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.asset(item.image, fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(width: 12),
@@ -385,8 +398,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.star,
-                            color: AppColors.starcolor, size: 14),
+                        Icon(Icons.star, color: AppColors.starcolor, size: 14),
                         const SizedBox(width: 4),
                         Text(
                           '4.8',
