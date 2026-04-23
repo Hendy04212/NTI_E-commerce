@@ -5,6 +5,7 @@ import 'package:ecommerce_shop/core/helper/cart_manager.dart';
 import 'package:ecommerce_shop/core/helper/my_navigator.dart';
 import 'package:ecommerce_shop/core/translation/translation_keys.dart';
 import 'package:ecommerce_shop/features/shoping_cart/views/checkout_view.dart';
+import 'package:ecommerce_shop/features/shoping_cart/views/product-details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -115,150 +116,172 @@ class CartItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            spreadRadius: 0,
-            blurRadius: 10,
-            offset: Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetails(
+              name: item.name,
+              image: item.image,
+              price: item.price,
+              disc: item.disc,
+            ),
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey[200],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: Image.asset(
-                    item.image,
-                    fit: BoxFit.cover,
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(6),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              spreadRadius: 0,
+              blurRadius: 10,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[200],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: item.image.startsWith('http')
+                        ? Image.network(
+                            item.image,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                          )
+                        : Image.asset(
+                            item.image,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        fontFamily: AppAssets.fontfamily,
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          fontFamily: AppAssets.fontfamily,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Text(
-                          item.rating.toString(),
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: AppAssets.fontfamily,
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Icon(Icons.star, color: AppColors.starcolor, size: 14),
-                      ],
-                    ),
-                    SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Text(
-                          '\$ ${item.price.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontFamily: AppAssets.fontfamily,
-                          ),
-                        ),
-                        if (item.oldPrice > 0) ...[
-                          SizedBox(width: 8),
+                      SizedBox(height: 6),
+                      Row(
+                        children: [
                           Text(
-                            '\$ ${item.oldPrice.toStringAsFixed(2)}',
+                            item.rating.toString(),
                             style: TextStyle(
                               fontSize: 13,
-                              color: Colors.grey,
-                              decoration: TextDecoration.lineThrough,
+                              fontWeight: FontWeight.w500,
                               fontFamily: AppAssets.fontfamily,
                             ),
                           ),
+                          SizedBox(width: 4),
+                          Icon(Icons.star, color: AppColors.starcolor, size: 14),
                         ],
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          onTap: onDecrease,
-                          child: SvgPicture.asset(AppAssets.minus),
-                        ),
-                        SizedBox(width: 5),
-                        Text(
-                          item.quantity.toString(),
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: AppAssets.fontfamily,
-                            fontWeight: FontWeight.w300,
-                            color: AppColors.carttext,
+                      ),
+                      SizedBox(height: 6),
+                      Row(
+                        children: [
+                          Text(
+                            '\$ ${item.price.toStringAsFixed(2)}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontFamily: AppAssets.fontfamily,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 5),
-                        InkWell(
-                          onTap: onIncrease,
-                          child: SvgPicture.asset(AppAssets.add),
-                        ),
-                      ],
-                    ),
-                  ],
+                          if (item.oldPrice > 0) ...[
+                            SizedBox(width: 8),
+                            Text(
+                              '\$ ${item.oldPrice.toStringAsFixed(2)}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey,
+                                decoration: TextDecoration.lineThrough,
+                                fontFamily: AppAssets.fontfamily,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: onDecrease,
+                            child: SvgPicture.asset(AppAssets.minus),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            item.quantity.toString(),
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: AppAssets.fontfamily,
+                              fontWeight: FontWeight.w300,
+                              color: AppColors.carttext,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          InkWell(
+                            onTap: onIncrease,
+                            child: SvgPicture.asset(AppAssets.add),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8),
-          Divider(color: Colors.grey.shade300, height: 1),
-          SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total Order (${item.quantity}) :',
-                style: TextStyle(
-                  fontFamily: AppAssets.fontfamily,
-                  fontSize: 12,
-                  color: Colors.grey[600],
+              ],
+            ),
+            SizedBox(height: 8),
+            Divider(color: Colors.grey.shade300, height: 1),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total Order (${item.quantity}) :',
+                  style: TextStyle(
+                    fontFamily: AppAssets.fontfamily,
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
                 ),
-              ),
-              Text(
-                '\$ ${(item.price * item.quantity).toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontFamily: AppAssets.fontfamily,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                Text(
+                  '\$ ${(item.price * item.quantity).toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontFamily: AppAssets.fontfamily,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

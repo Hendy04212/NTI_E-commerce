@@ -47,12 +47,21 @@ class CartItemWidget extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(6),
-              child: Image.asset(
-                item.image,
-                width: 90,
-                height: 90,
-                fit: BoxFit.cover,
-              ),
+              child: item.image.startsWith('http')
+                  ? Image.network(
+                      item.image,
+                      width: 90,
+                      height: 90,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                    )
+                  : Image.asset(
+                      item.image,
+                      width: 90,
+                      height: 90,
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           SizedBox(width: 10),

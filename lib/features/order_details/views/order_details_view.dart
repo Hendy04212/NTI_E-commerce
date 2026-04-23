@@ -378,7 +378,14 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(item.image, fit: BoxFit.cover),
+                  child: item.image.startsWith('http')
+                      ? Image.network(
+                          item.image,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                        )
+                      : Image.asset(item.image, fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(width: 12),

@@ -50,7 +50,9 @@ class OrderItem extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
-                image: AssetImage(order['image']),
+                image: order['image'].toString().startsWith('http')
+                    ? NetworkImage(order['image']) as ImageProvider
+                    : AssetImage(order['image']),
                 fit: BoxFit.cover,
               ),
             ),

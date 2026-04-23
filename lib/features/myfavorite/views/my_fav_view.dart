@@ -160,12 +160,21 @@ class _FavoriteProductCard extends StatelessWidget {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
-                    child: Image.asset(
-                      item.image,
-                      height: 196,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                    child: item.image.startsWith('http')
+                        ? Image.network(
+                            item.image,
+                            height: 196,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Icon(Icons.broken_image, size: 80, color: Colors.grey),
+                          )
+                        : Image.asset(
+                            item.image,
+                            height: 196,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
                 Positioned(

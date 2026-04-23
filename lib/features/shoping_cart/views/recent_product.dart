@@ -176,11 +176,19 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
                 Center(
-                  child: Image.asset(
-                    image,
-                    height: 196,
-                    fit: BoxFit.cover,
-                  ),
+                  child: image.startsWith('http')
+                      ? Image.network(
+                          image,
+                          height: 196,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Icon(Icons.broken_image, size: 80, color: Colors.grey),
+                        )
+                      : Image.asset(
+                          image,
+                          height: 196,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ],
             ),

@@ -1,3 +1,5 @@
+import 'package:ecommerce_shop/features/home/get_product/data/repo/get_product_repo.dart';
+
 abstract class GetProductsState {}
 
 class GetProductsInitial extends GetProductsState {}
@@ -5,7 +7,7 @@ class GetProductsInitial extends GetProductsState {}
 class GetProductsLoading extends GetProductsState {}
 
 class GetProductsSuccess extends GetProductsState {
-  final List<dynamic> products;
+  final List<Product> products;
 
   GetProductsSuccess(this.products);
 }

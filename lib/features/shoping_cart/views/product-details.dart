@@ -115,11 +115,19 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: Stack(
               children: [
                 Center(
-                  child: Image.asset(
-                    widget.image,
-                    height: 250,
-                    fit: BoxFit.contain,
-                  ),
+                  child: widget.image.startsWith('http')
+                      ? Image.network(
+                          widget.image,
+                          height: 250,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Icon(Icons.broken_image, size: 80, color: Colors.grey),
+                        )
+                      : Image.asset(
+                          widget.image,
+                          height: 250,
+                          fit: BoxFit.contain,
+                        ),
                 ),
                 Positioned(
                   top: 10,
