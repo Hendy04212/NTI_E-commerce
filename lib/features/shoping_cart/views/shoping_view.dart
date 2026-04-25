@@ -10,8 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
-class ShopingView extends StatelessWidget {
+class ShopingView extends StatefulWidget {
   const ShopingView({super.key});
+
+  @override
+  State<ShopingView> createState() => _ShopingViewState();
+}
+
+class _ShopingViewState extends State<ShopingView> {
+  int _selectedCategoryIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +56,18 @@ class ShopingView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            CustomCategoriesSection(),
+            CustomCategoriesSection(
+              selectedIndex: _selectedCategoryIndex,
+              onCategoryTap: (index) {
+                setState(() {
+                  if (_selectedCategoryIndex == index) {
+                    _selectedCategoryIndex = -1;
+                  } else {
+                    _selectedCategoryIndex = index;
+                  }
+                });
+              },
+            ),
             const SizedBox(
               height: 20,
             ),
