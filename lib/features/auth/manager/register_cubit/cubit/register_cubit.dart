@@ -3,6 +3,7 @@ import 'package:ecommerce_shop/features/auth/manager/register_cubit/cubit/regist
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit() : super(RegisterInitState());
@@ -32,6 +33,13 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(RegisterChangePassState());
   }
 
+  /// Save user's fullName and phone to SharedPreferences
+  Future<void> _saveUserProfileData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userFullName', userName.text.trim());
+    await prefs.setString('userPhone', phone.text.trim());
+  }
+
   void onRegisterPressed() async {
     if (formKey.currentState != null && formKey.currentState!.validate()) {
       if (passwordController.text != passwordConfirmController.text) {
@@ -53,7 +61,9 @@ class RegisterCubit extends Cubit<RegisterState> {
           (String error) {
             emit(RegisterErrorState(error));
           },
-          (r) {
+          (r) async {
+            // Auto-save fullName & phone to profile on successful registration
+            await _saveUserProfileData();
             emit(RegisterSuccessState());
           },
         );
